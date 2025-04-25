@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ProjectAPI.Domain.Products;
+﻿using ProjectAPI.Domain.Products;
+using Microsoft.EntityFrameworkCore;
+using Flunt.Notifications; 
 
 namespace ProjectAPI.Infra.Data;
 
@@ -7,21 +8,28 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)  { }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Product>()
-            .Property(p => p.Description).HasMaxLength(500).IsRequired (false);
+        base.OnModelCreating(builder); 
+
+        //  Ignorar a classe Notification para evitar o erro de chave primária
+        builder.Ignore<Notification>();
 
         builder.Entity<Product>()
-            .Property(p => p.Name).HasMaxLength(120).IsRequired(false);
-
+            .Property(p => p.Name).IsRequired();
         builder.Entity<Product>()
-            .Property(p => p.Code).HasMaxLength(20).IsRequired(false);
+            .Property(p => p.Description).HasMaxLength(255);
 
         builder.Entity<Category>()
-         .ToTable("Categories");
+            .Property(p => p.Name).IsRequired();
     }
 
+    protected override void ConfigureConventions(ModelConfigurationBuilder configuration)
+    {
+        configuration.Properties<string>()
+            .HaveMaxLength(100);
+    }
 }

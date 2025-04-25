@@ -1,13 +1,12 @@
-﻿using ProjectAPI.Domain;
-
-namespace ProjectAPI.Domain.Products;
-
-public class Product : Entity
+﻿namespace ProjectAPI.Domain.Products
 {
-    public string Name { get; set; }
-    public Guid CategoryId { get; set; }
-    public Category Category { get; set; }
-    public string Description { get; set; }
-    public bool HasStock { get; set; }
-    public bool Active { get; set; } = true;
+    public class Product : Entity
+    {
+        public string Name { get; set; }
+        public Guid CategoryId { get; set; }
+        public Category Category { get; set; }
+        public string Description { get; set; }
+        public bool HasStock { get; set; }
+        public bool Active { get; set; } = true;
+    }
 }
