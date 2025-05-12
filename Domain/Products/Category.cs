@@ -1,21 +1,43 @@
 ﻿using Flunt.Validations;
-using System.Diagnostics.Contracts;
 
 namespace ProjectAPI.Domain.Products
 {
     public class Category : Entity
     {
-        public string Name { get; set; }
-        public bool Active { get;  set; } 
+        public string Name { get; private set; }
+        public bool Active { get; private set; }
 
-        public Category(string name)
+        public Category(string name, string createBy, string editeBy)
         {
-            var contract = new Contract<Category>()
-                .IsNotNull(name, "Name");
-                AddNotifications(contract);
 
             Name = name;
             Active = true;
+            CreateBy = createBy;
+            EditeBy = editeBy;
+            EditeOn = DateTime.Now;
+            CreateOn = DateTime.Now;
+
+            Validate();
+        }
+
+        private void Validate()
+        {
+            var contract = new Contract<Category>()
+                            .IsNotNullOrEmpty(Name, "Name")
+                            .IsGreaterOrEqualsThan(Name, 3, "Name")
+                            .IsNotNullOrEmpty(CreateBy, "CreateBy")
+                            .IsNotNullOrEmpty(EditeBy, "EditeBy");
+            AddNotifications(contract);
+        }
+
+        public void EditInfo(string name, bool active, string editeBy)
+        {
+            Active = active;
+            Name = name;
+            EditeBy = editeBy;
+            EditeOn = DateTime.Now;
+
+            Validate();
         }
     }
-}
+ }

@@ -1,10 +1,13 @@
-﻿using ProjectAPI.Domain.Products;
+﻿//Utilizado a funcionalidade de Implicit Using
+using ProjectAPI.Domain.Products;
 using Microsoft.EntityFrameworkCore;
-using Flunt.Notifications; 
+using Flunt.Notifications;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ProjectAPI.Infra.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
